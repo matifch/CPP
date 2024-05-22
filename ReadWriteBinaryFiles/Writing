@@ -1,0 +1,40 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+int main() {
+    // Data to be written to the file
+    int i=34568;
+	double d=56.7866;
+
+    // Open a binary file for writing
+    ofstream outFile("myData.dat", ios::binary); // ios::app
+    if (!outFile) {
+        cerr << "Error opening file for writing." << endl;
+        return 1;
+    }
+    const char *ptr;
+    //ptr=(char *)&i;  // old style C
+    ptr=reinterpret_cast<char *>(&i);
+    // Write the integer starting from ptr to the binary file
+    outFile.write(ptr, 4);
+    if (!outFile) {
+        cerr << "Error writing integer to file." << endl;
+        outFile.close();
+        return 1;
+    }
+//ptr=(char*)&d;
+	ptr=reinterpret_cast<char *>(&d);
+    // Write the double to the binary file
+    outFile.write(ptr, sizeof(d));
+    if (!outFile) {
+        cerr << "Error writing double to file." << endl;
+        outFile.close();
+        return 1;
+    }
+
+    // Close the file
+    outFile.close();
+    cout << "Data written successfully." << endl;
+
+    return 0;
+}
